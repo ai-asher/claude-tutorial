@@ -38,8 +38,33 @@ graph TD
 
 可选值：
 - `claude-sonnet-4-20250514` — 默认，均衡的速度和质量
-- `claude-opus-4-20250514` — 最强推理能力，适合复杂任务
+- `claude-opus-4-8` — 强推理能力，适合复杂任务
+- `claude-fable-5` — 最新旗舰（Mythos 级），自带 1M 上下文
 - `claude-haiku-3-20250307` — 最快速度，适合简单任务
+
+### fallbackModel — 回退模型
+
+主模型过载或不可用时，按顺序尝试的备用模型（最多三个）：
+
+```json
+{
+  "fallbackModel": ["claude-opus-4-8", "claude-sonnet-4-20250514"]
+}
+```
+
+也可用 `--fallback-model` 命令行参数，现在同样适用于交互式会话。
+
+### availableModels — 模型允许清单
+
+限制本会话 / 项目能用的模型（团队治理常用）：
+
+```json
+{
+  "availableModels": ["claude-sonnet-4-20250514", "claude-opus-4-8"]
+}
+```
+
+配合 `enforceAvailableModels: true`（managed 设置）时，连默认模型也会被约束到清单内，且用户/项目设置无法放宽 managed 清单。
 
 ### effort — 推理深度
 
@@ -187,12 +212,15 @@ Hooks 允许你在特定事件发生时自动执行脚本：
       "allowedDomains": ["*.github.com", "npmjs.org"],
       "deniedDomains": ["*.tracking.com", "evil.example.com"]
     },
-    "writePaths": ["/tmp", "./dist", "./build"]
+    "writePaths": ["/tmp", "./dist", "./build"],
+    "allowAppleEvents": false
   }
 }
 ```
 
 **`network.deniedDomains`（v2.1.113+）：** 即使 `allowedDomains` 使用了通配符，`deniedDomains` 也会优先阻止匹配的域名。适合白名单整个域下、但屏蔽少数敏感子域名的场景。
+
+**`allowAppleEvents`（v2.1.181+，macOS）：** 设为 `true` 让沙盒命令可以发送 Apple Events（例如脚本控制其他 app）。默认关闭。
 
 ::: tip 企业 TLS 代理
 v2.1.113 起，Claude Code 默认信任 **操作系统 CA 证书库**，企业内网的 TLS 拦截代理无需额外配置。如果要回到只信任 bundled CA，设置环境变量 `CLAUDE_CODE_CERT_STORE=bundled`。
@@ -253,6 +281,34 @@ v2.1.110 新增的渲染相关配置：
   ]
 }
 ```
+
+### worktree — Git Worktree 行为
+
+控制 `--worktree`、`EnterWorktree` 和 agent 隔离创建 worktree 的方式：
+
+```json
+{
+  "worktree": {
+    "baseRef": "fresh",
+    "bgIsolation": "none"
+  }
+}
+```
+
+| 字段 | 可选值 | 说明 |
+|------|-------|------|
+| `baseRef` | `fresh`（默认） / `head` | 新 worktree 从 `origin/<默认分支>` 还是本地 `HEAD` 分叉。想保留未推送的提交用 `head` |
+| `bgIsolation` | `worktree`（默认） / `none` | 后台会话是否用独立 worktree。`none` 让后台会话直接编辑工作副本（worktree 不方便的仓库适用） |
+
+### disableBundledSkills — 隐藏内置技能
+
+```json
+{
+  "disableBundledSkills": true
+}
+```
+
+隐藏内置的 skills、workflows 和 slash 命令，让模型只看到你自己的。也可用环境变量 `CLAUDE_CODE_DISABLE_BUNDLED_SKILLS=1`。
 
 ## 常用环境变量
 

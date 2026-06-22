@@ -29,6 +29,8 @@ cat error.log | claude -p "分析这个错误日志"
 | `--name` | - | 为会话指定名称 | `claude --name "auth重构"` |
 | `--session-id` | - | 指定会话 ID 以恢复特定会话 | `claude --session-id abc123` |
 | `--fork-session` | - | 复制指定会话的上下文，创建新会话 | `claude --fork-session abc123` |
+| `--bg` | - | 在后台启动会话，配合 `claude agents` 查看 | `claude --bg -p "监控 CI"` |
+| `--safe-mode` | - | 禁用所有自定义（CLAUDE.md/插件/skills/hooks/MCP）启动，用于排障 | `claude --safe-mode` |
 
 ### 常见用法
 
@@ -289,9 +291,24 @@ Claude Code 还提供了一系列独立的子命令。
 
 | 子命令 | 说明 | 示例 |
 |--------|------|------|
-| `claude plugin list` | 列出已安装插件 | `claude plugin list` |
+| `claude plugin list` | 列出已安装插件（`--enabled`/`--disabled` 过滤） | `claude plugin list` |
 | `claude plugin install` | 安装插件 | `claude plugin install context7` |
 | `claude plugin remove` | 卸载插件 | `claude plugin remove context7` |
+| `claude plugin init <name>` | 在 `.claude/skills` 脚手架一个新插件 | `claude plugin init my-plugin` |
+| `claude plugin prune` | 清理无用的自动安装依赖插件 | `claude plugin prune` |
+| `claude plugin details <name>` | 查看插件的组件清单与 token 成本 | `claude plugin details figma` |
+
+### claude agents
+
+统一查看和派发会话（研究预览）。详见 [Agent View](/zh/features/agent-view)。
+
+| 子命令 / 参数 | 说明 | 示例 |
+|--------------|------|------|
+| `claude agents` | 列出所有会话（运行中/等你/已完成） | `claude agents` |
+| `claude agents --json` | 以 JSON 输出，便于脚本处理 | `claude agents --json` |
+| `claude agents --cwd <path>` | 只看指定目录的会话 | `claude agents --cwd .` |
+
+派发后台会话时还支持 `--model`、`--effort`、`--permission-mode`、`--add-dir` 等配置参数。
 
 ### claude update
 
@@ -342,7 +359,17 @@ claude \
 | `CLAUDE_CODE_NO_FLICKER` | 启用无闪烁渲染（全屏模式默认开） | `export CLAUDE_CODE_NO_FLICKER=1` |
 | `CLAUDE_CODE_ENABLE_AWAY_SUMMARY` | 强制开关 `/recap` 功能 | `=0` 禁用 / `=1` 强制启用 |
 | `CLAUDE_CODE_DISABLE_TERMINAL_TITLE` | 不修改终端窗口标题 | `=1` 禁用 |
+| `CLAUDE_CODE_HIDE_CWD` | 在启动 logo 中隐藏工作目录 | `=1` 隐藏 |
+| `CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN` | 关闭全屏渲染器，保留终端原生滚动历史 | `=1` |
 | `NO_COLOR` | 禁用所有 ANSI 颜色 | `=1` |
+
+### 排障 / 自定义
+
+| 变量 | 作用 | 示例 |
+|------|------|------|
+| `CLAUDE_CODE_SAFE_MODE` | 等同 `--safe-mode`，禁用所有自定义启动 | `=1` |
+| `CLAUDE_CODE_DISABLE_BUNDLED_SKILLS` | 隐藏内置 skills / workflows / 命令 | `=1` |
+| `DISABLE_UPDATES` | 完全阻止所有更新路径（比 `DISABLE_AUTOUPDATER` 更严格） | `=1` |
 
 ### 性能 / 缓存
 

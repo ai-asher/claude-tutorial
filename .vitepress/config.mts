@@ -36,7 +36,7 @@ export default withMermaid(defineConfig({
                 { text: '安装与配置', link: '/zh/guide/installation' },
                 { text: '第一次对话', link: '/zh/guide/first-session' },
                 { text: '权限系统', link: '/zh/guide/permission-system' },
-                { text: 'Effort 等级与 Opus 4.7', link: '/zh/guide/effort-levels' },
+                { text: 'Effort 等级与模型选择', link: '/zh/guide/effort-levels' },
               ]
             }
           ],
@@ -59,6 +59,9 @@ export default withMermaid(defineConfig({
                 { text: 'Skills 概览', link: '/zh/features/skills' },
                 { text: 'MCP Servers', link: '/zh/features/mcp-servers' },
                 { text: 'Agent Teams', link: '/zh/features/agent-teams' },
+                { text: '动态工作流', link: '/zh/features/workflows' },
+                { text: 'Agent View', link: '/zh/features/agent-view' },
+                { text: '目标模式 /goal', link: '/zh/features/goal-mode' },
                 { text: 'Git Worktrees', link: '/zh/features/git-worktrees' },
                 { text: 'Plan Mode', link: '/zh/features/plan-mode' },
                 { text: 'Auto Mode', link: '/zh/features/auto-mode' },

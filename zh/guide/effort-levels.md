@@ -1,6 +1,6 @@
-# Effort 等级与 Opus 4.7
+# Effort 等级与模型选择
 
-Claude Code 不只是选"哪个模型"，还能选"模型想多深"。**Effort 等级**让你在速度和智力之间精确调整，搭配最新的 **Opus 4.7** 模型，你可以根据任务复杂度切换到最合适的思考深度。
+Claude Code 不只是选"哪个模型"，还能选"模型想多深"。**Effort 等级**让你在速度和智力之间精确调整，搭配 **Fable 5 / Opus 4.8** 等旗舰模型，你可以根据任务复杂度切换到最合适的思考深度。
 
 ## 什么是 Effort
 
@@ -20,35 +20,55 @@ Effort = 思考深度 × 时间投入 × 成本
 
 ## 五级 Effort 速查
 
-Claude Code v2.1.116 支持五个等级：
+Claude Code 支持五个等级：
 
 | Effort | 适用模型 | 速度 | 质量 | 推荐场景 |
 |--------|---------|------|------|---------|
 | `low` | 全部 | ⚡️⚡️⚡️⚡️⚡️ | ★★ | 代码解释、简单问答、格式转换 |
 | `medium` | 全部 | ⚡️⚡️⚡️⚡️ | ★★★ | 日常开发、文件编辑（默认值） |
 | `high` | 全部 | ⚡️⚡️⚡️ | ★★★★ | 复杂推理、架构设计、疑难 bug |
-| `xhigh` | **仅 Opus 4.7** | ⚡️⚡️ | ★★★★★ | 多文件大规模重构、深度 debug |
-| `max` | **仅 Opus 4.7** | ⚡️ | ★★★★★+ | 极限难题、关键决策（成本高） |
+| `xhigh` | **旗舰模型** | ⚡️⚡️ | ★★★★★ | 多文件大规模重构、深度 debug |
+| `max` | **旗舰模型** | ⚡️ | ★★★★★+ | 极限难题、关键决策（成本高） |
 
 ::: warning xhigh 与 max 的限制
-`xhigh` 和 `max` 只在 **Opus 4.7** 模型上生效。Sonnet、Haiku 或其他模型会自动回退到 `high`。
+`xhigh` 和 `max` 只在旗舰模型（**Fable 5、Opus 4.8** 等）上生效。Sonnet、Haiku 或其他模型会自动回退到 `high`。
 :::
 
-## Opus 4.7 简介
+## 模型简介
 
-Opus 4.7 是 Anthropic 2026 年推出的旗舰模型，也是目前 Claude Code 中推理能力最强的选择。
+Anthropic 的模型阵容在 2026 年持续更新，目前 Claude Code 中能用到的旗舰是 **Claude Fable 5**。
 
-### 与 Sonnet / Haiku 的定位
+### Claude Fable 5（最新旗舰）
+
+Fable 5 是 Anthropic 在 2026 年推出的新一代模型，属于 **Mythos 级（Mythos-class）**——这个层级的能力超过此前所有公开发布的 Claude 模型（包括 Opus）。Fable 5 是面向通用使用、并加入额外安全措施的版本。
+
+```bash
+# 切换到 Fable 5
+/model
+# 在列表中选择 Fable 5
+
+# 或启动时指定
+claude --model claude-fable-5
+```
+
+::: tip Fable 5 自带 1M 上下文
+Fable 5 默认就是 100 万 token 上下文，不需要额外的 "1M" 后缀——一次能读进一个超大仓库。
+:::
+
+官方介绍：https://www.anthropic.com/news/claude-fable-5-mythos-5
+
+### 与 Sonnet / Haiku / Opus 的定位
 
 | 模型 | 定位 | 适合 | effort 支持 |
 |------|------|------|------------|
 | **Haiku** | 最快 | 简单查询、批量轻任务 | low / medium / high |
 | **Sonnet** | 均衡 | 日常编码（推荐默认） | low / medium / high |
-| **Opus 4.7** | 最强 | 复杂推理、大规模变更 | **low ~ max** 全支持 |
+| **Opus 4.8** | 强推理 | 复杂推理、大规模变更 | **low ~ max** 全支持 |
+| **Fable 5** | 最强（Mythos 级） | 最难的推理与编排任务 | **low ~ max** 全支持 |
 
-### 1M Context 版本
+### 1M Context
 
-部分订阅计划提供 **"Opus 4.7 with 1M context"** 选项——一次可以阅读百万 token 的代码。适合：
+Fable 5 默认 100 万 token 上下文；Opus 也提供 **"with 1M context"** 选项。百万上下文适合：
 - 超大单仓库的全局重构
 - 需要同时理解 30+ 文件的架构决策
 - 长时间的深度会话（无需频繁 `/compact`）
@@ -72,7 +92,7 @@ Opus 4.7 是 Anthropic 2026 年推出的旗舰模型，也是目前 Claude Code 
 │   low     — Fast, low cost           │
 │   medium  — Balanced (default)       │
 │ ▶ high    — Deep reasoning           │
-│   xhigh   — Opus 4.7 only            │
+│   xhigh   — flagship only            │
 │   max     — Maximum thinking         │
 └──────────────────────────────────────┘
 ← / → 或 ↑ / ↓ 切换 · Enter 确认
@@ -99,8 +119,8 @@ claude --effort high
 # 一次性任务用最高 effort
 claude --effort max -p "分析 src/core 的所有循环依赖并给出重构方案"
 
-# 切 Opus 4.7 + xhigh（最强组合）
-claude --model claude-opus-4-7 --effort xhigh
+# 切 Fable 5 + xhigh（最强组合）
+claude --model claude-fable-5 --effort xhigh
 ```
 
 ## 什么时候该用哪个
@@ -134,7 +154,7 @@ claude
 ### `xhigh` — 大型改动前
 
 ```bash
-claude --model claude-opus-4-7 --effort xhigh
+claude --model claude-fable-5 --effort xhigh
 > 重构整个认证模块，从 JWT 迁移到 session-based，
   涉及 12 个文件，需要保留兼容层
 ```
@@ -167,7 +187,7 @@ claude
 Auto Mode 的判断逻辑：
 - 简单问题 → `low` / `medium`
 - 多步推理 → `high`
-- 识别为复杂任务 → `xhigh` / `max`（需 Opus 4.7）
+- 识别为复杂任务 → `xhigh` / `max`（需旗舰模型）
 
 ::: info 手动 vs 自动
 手动 effort 适合你清楚任务难度；Auto Mode 适合任务难度不确定或变化较大的长会话。两者不冲突，可以随时切换。
@@ -182,8 +202,8 @@ Auto Mode 的判断逻辑：
 | `low` | 8s | ~500 | $0.02 |
 | `medium` | 15s | ~2,000 | $0.05 |
 | `high` | 35s | ~8,000 | $0.15 |
-| `xhigh`（Opus 4.7） | 70s | ~20,000 | $0.40 |
-| `max`（Opus 4.7） | 120s+ | ~50,000+ | $1.00+ |
+| `xhigh`（旗舰） | 70s | ~20,000 | $0.40 |
+| `max`（旗舰） | 120s+ | ~50,000+ | $1.00+ |
 
 ::: warning 实际数据会变
 具体成本取决于代码量、对话长度、API 定价。上表仅作数量级参考。用 `/cost` 查看当前会话实际花费。
@@ -192,7 +212,7 @@ Auto Mode 的判断逻辑：
 ## 常见问题
 
 **Q: `xhigh` 和 `max` 的区别？**
-A: 两者都只在 Opus 4.7 上生效，`max` 思考深度更极致，耗时更长。如果 `xhigh` 解决不了，才值得上 `max`。
+A: 两者都只在旗舰模型（Fable 5 / Opus 4.8）上生效，`max` 思考深度更极致，耗时更长。如果 `xhigh` 解决不了，才值得上 `max`。
 
 **Q: Sonnet 上设置 `xhigh` 会怎样？**
 A: 自动回退到 `high`，不会报错，但也不会真的 `xhigh`。
@@ -208,7 +228,7 @@ A: 输入 `/effort` 不带参数，当前等级会高亮显示。
 | 要点 | 记忆点 |
 |------|-------|
 | Effort 等级 | low / medium / high / xhigh / max |
-| Opus 4.7 独占 | xhigh、max 等级 |
+| 旗舰独占 | xhigh、max 等级（Fable 5 / Opus 4.8） |
 | 常用命令 | `/effort` 交互 · `--effort` CLI |
 | 日常推荐 | medium（默认）+ 偶尔切 high |
 | 不要滥用 | max 成本显著高，只在关键决策时用 |
