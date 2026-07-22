@@ -45,6 +45,19 @@ features:
     linkText: Switch to English →
 ---
 
+<!-- 手机端章节快捷导航（桌面端隐藏，桌面有顶部导航栏） -->
+<div class="mobile-chapter-nav">
+  <p class="mcn-title">📖 快速导航</p>
+  <div class="mcn-grid">
+    <a href="/zh/guide/ai-concepts" class="mcn-item"><span class="mcn-icon">🚀</span><span>入门指南</span></a>
+    <a href="/zh/commands/slash-commands" class="mcn-item"><span class="mcn-icon">📖</span><span>命令大全</span></a>
+    <a href="/zh/features/claude-md" class="mcn-item"><span class="mcn-icon">🔧</span><span>核心功能</span></a>
+    <a href="/zh/tutorials/github-review" class="mcn-item"><span class="mcn-icon">💡</span><span>实战教程</span></a>
+    <a href="/zh/advanced/settings-deep-dive" class="mcn-item"><span class="mcn-icon">🎯</span><span>进阶</span></a>
+    <a href="/zh/design/index" class="mcn-item"><span class="mcn-icon">🎨</span><span>设计资源库</span></a>
+  </div>
+</div>
+
 ## 关于作者
 
 我是 Asher，一个 Web3 SRE 负责人，也是 Claude Code 的重度用户。

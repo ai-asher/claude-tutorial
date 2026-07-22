@@ -142,6 +142,9 @@ export default withMermaid(defineConfig({
           ],
         },
         outline: { label: '目录' },
+        sidebarMenuLabel: '章节目录',
+        returnToTopLabel: '回到顶部',
+        darkModeSwitchLabel: '外观',
         docFooter: { prev: '上一篇', next: '下一篇' },
         lastUpdated: { text: '最后更新' },
         editLink: {

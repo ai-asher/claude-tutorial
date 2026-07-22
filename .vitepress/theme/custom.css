@@ -404,3 +404,88 @@ body::before {
   .VPHero .name { font-size: 36px !important; }
   #techParticles { opacity: 0.2 !important; }
 }
+
+/* ═══ Mobile Navigation Friendliness ═══ */
+
+/* 1. Chapter quick-nav card grid on homepage — mobile only */
+.mobile-chapter-nav { display: none; }
+@media (max-width: 768px) {
+  .mobile-chapter-nav {
+    display: block;
+    margin: 8px 24px 0;
+    padding: 20px;
+    border: 1px solid var(--vp-c-divider);
+    border-radius: 16px;
+    background: var(--vp-c-bg-soft);
+  }
+  .mobile-chapter-nav .mcn-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--vp-c-text-2);
+    margin: 0 0 14px;
+  }
+  .mobile-chapter-nav .mcn-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .mobile-chapter-nav .mcn-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 14px;
+    border: 1px solid var(--vp-c-divider);
+    border-radius: 12px;
+    background: var(--vp-c-bg);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--vp-c-text-1);
+    text-decoration: none !important;
+    transition: border-color 0.25s, box-shadow 0.25s;
+  }
+  .mobile-chapter-nav .mcn-item:active {
+    border-color: var(--vp-c-brand-1);
+    box-shadow: 0 2px 12px rgba(124, 58, 237, 0.18);
+  }
+  .mobile-chapter-nav .mcn-icon { font-size: 18px; }
+}
+
+/* 2. Make the mobile hamburger easier to spot — pulse ring + brand color */
+@media (max-width: 768px) {
+  .VPNavBarHamburger {
+    position: relative;
+  }
+  .VPNavBarHamburger .container {
+    color: var(--vp-c-brand-1) !important;
+  }
+  .VPNavBarHamburger::after {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(124, 58, 237, 0.45);
+    animation: hamburgerHint 2.4s ease-out 3;
+    pointer-events: none;
+  }
+  @keyframes hamburgerHint {
+    0% { transform: scale(0.9); opacity: 1; }
+    70%, 100% { transform: scale(1.5); opacity: 0; }
+  }
+}
+
+/* 3. Doc pages: make the "Menu" local-nav bar more obvious as the chapter menu */
+@media (max-width: 959px) {
+  .VPLocalNav .menu {
+    color: var(--vp-c-brand-1) !important;
+    font-weight: 600 !important;
+  }
+  .VPLocalNav .menu .vpi-align-left {
+    color: var(--vp-c-brand-1) !important;
+  }
+  .VPLocalNav {
+    border-bottom: 1px solid rgba(124, 58, 237, 0.18) !important;
+    background: var(--vp-nav-bg-color) !important;
+    backdrop-filter: blur(12px);
+  }
+}
